@@ -5,6 +5,7 @@ import socket
 user = "xxx" # 学号
 password = "xxx" # 密码
 operator = "unicom" # 运营商，电信填telecom，联通填unicom 移动cmcc
+ip ="" # 有多张网卡，如虚拟机，请自寻根据ipconfig查看ip地址
 
 def check():
     url = "http://1.1.1.1"
@@ -23,13 +24,16 @@ def get_local_ip():
 
 def login(user, password):
     check()  # Check if already logged in
-    ip=get_local_ip()#获取本地IP地址
+
+    global ip
     # 编写代码判断ip是否获取成功
-    if ip == "  ":  # 判断ip是否获取成功
-        print("获取IP失败")
-        exit()
-    else:
-        print(f"获取ip成功ip:{ip}")
+    if not ip:
+        ip=get_local_ip()#获取本地IP地址
+        if ip:
+            print(f"获取ip成功: {ip}")
+        else:
+            print("获取ip失败")
+            exit()
     url = f"http://1.1.1.1:801/eportal/?c=ACSetting&a=Login&protocol=http:&hostname=1.1.1.1&iTermType=1&wlanuserip={ip}&wlanacip=null&wlanacname=null&mac=00-00-00-00-00-00&ip={ip}&enAdvert=0&queryACIP=0&loginMethod=1"
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
